@@ -18,6 +18,13 @@
   },
   "homepage": "https://github.com/Kiwied/news-explorer-api#readme",
   "dependencies": {
-    "nodemon": "^2.0.5"
+    "body-parser": "^1.19.0",
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "nodemon": "^2.0.5",
+    "validator": "^13.1.17"
   }
 }
