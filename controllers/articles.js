@@ -3,6 +3,7 @@ const Article = require('../models/article');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 
+const { JWT_SECRET = 'dev-key' } = process.env;
 
 function getUserArticles(req, res, next) {
   Article.find({ owner: req.user._id })
@@ -33,15 +34,26 @@ function createArticle(req, res, next) {
 }
 
 function deleteArticle(req, res, next) {
-  Article.findByIdAndRemove(req.params.articleId)
+  Article.findById(req.params.articleId)
     .then((data) => {
       if (data === null) {
         throw new NotFoundError('Статья не найдена');
       } else {
-        res.send({ message: 'Статья удалена' });
+        console.log(req.user._id);
+        console.log(data.owner);
+        if ({ $eq: [req.user._id, data.owner] }) {
+          Article.findByIdAndRemove(req.params.articleId)
+            .then(() => {
+              res.send({ message: 'Статья удалена' });
+            })
+            .catch(next);
+        } else {
+          throw new NotFoundError('Статья не найдена');
+        }
       }
     })
     .catch(next);
+
 }
 
 module.exports = { getUserArticles, createArticle, deleteArticle }
