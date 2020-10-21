@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 
 const users = require('./routes/users');
 const articles = require('./routes/articles');
@@ -19,11 +20,16 @@ mongoose.connect('mongodb://localhost:27017/newsdb', {
   useFindAndModify: false,
 });
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use(limiter);
 app.use(bodyParser.json());
+app.use(cors({ origin: true }));
 
 app.use(requestLogger);
-
-app.use(cors({ origin: true }));
 
 app.post('/signup', signup);
 app.post('/signin', signin);
