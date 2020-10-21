@@ -1,8 +1,10 @@
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const { celebrate, Joi, errors } = require('celebrate');
 
 const users = require('./routes/users');
 const articles = require('./routes/articles');
@@ -31,8 +33,19 @@ app.use(cors({ origin: true }));
 
 app.use(requestLogger);
 
-app.post('/signup', signup);
-app.post('/signin', signin);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+    name: Joi.string().required().min(2).max(30),
+  }),
+}), signup);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), signin);
 
 app.use(auth);
 

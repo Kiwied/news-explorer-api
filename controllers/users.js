@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const ConflictError = require('../errors/ConflictError');
 const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
 
 const { JWT_SECRET = 'dev-key' } = process.env;
 
@@ -36,11 +37,11 @@ function signup(req, res, next) {
       User.create({
         name,
         email,
-        password: hash
+        password: hash,
       })
         .then((user) => res.send({
           name: user.name,
-          email: user.email
+          email: user.email,
         }))
         .catch((err) => {
           if (err.name === 'MongoError') {

@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
+    maxlength: 30,
   },
   password: {
     type: String,
@@ -25,9 +25,9 @@ const userSchema = new mongoose.Schema({
         return validator.isEmail(v);
       },
       message: 'Введите валидный email',
-    }
-  }
-}, { versionKey: false })
+    },
+  },
+}, { versionKey: false });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')

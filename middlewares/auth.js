@@ -4,7 +4,6 @@ const { JWT_SECRET = 'dev-key' } = process.env;
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(authorization);
   if (!(authorization === undefined) && !authorization.startsWith('Bearer ')) {
     return res.status(401).send({ message: 'Необходима авторизация' });
   }
