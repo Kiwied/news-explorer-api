@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const users = require('./routes/users');
 const articles = require('./routes/articles');
+const notFound = require('./routes/notFound');
 const auth = require('./middlewares/auth');
 const { signin, signup } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -31,6 +32,7 @@ app.use(auth);
 
 app.use('/users', users);
 app.use('/articles', articles);
+app.use('*', notFound);
 
 app.use(errorLogger);
 
