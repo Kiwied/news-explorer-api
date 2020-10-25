@@ -4,6 +4,8 @@
 logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # dependencies
 /node_modules
@@ -25,10 +27,7 @@ npm-debug.log*
 .env.test.local
 .env.production.local
 .idea/
-.editorconfig
 .nojekyll
 .vscode/
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+
