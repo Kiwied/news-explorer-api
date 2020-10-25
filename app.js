@@ -12,6 +12,7 @@ const notFound = require('./routes/notFound');
 const auth = require('./middlewares/auth');
 const { signin, signup } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const centralizedErrorHandler = require('./middlewares/centralizedErrorHandler');
 
 const { NODE_ENV, MONGODB, PORT = 3000 } = process.env;
 const app = express();
@@ -60,17 +61,6 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-  next();
-});
+app.use(centralizedErrorHandler);
 
 app.listen(PORT);
