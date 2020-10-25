@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const { celebrate, Joi, errors } = require('celebrate');
+const helmet = require('helmet');
 
 const router = require('./routes/index');
 const auth = require('./middlewares/auth');
@@ -32,6 +33,7 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(cors({ origin: true }));
+app.use(helmet());
 
 app.use(requestLogger);
 
