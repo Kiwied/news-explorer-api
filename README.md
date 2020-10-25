@@ -27,6 +27,6 @@
 
 ## Ссылки
 
-домен для обращения к API: http://www.api.news-kw.students.nomoreparties.space/   
+домен для обращения к API: http://www.api.news-kw.students.nomoreparties.xyz/   
 репозиторий с React-приложением: https://github.com/Kiwied/news-explorer-frontend   
 публичный IP адресс: 178.154.226.118   
