@@ -2,6 +2,7 @@ const Article = require('../models/article');
 
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
+const ForbiddenError = require('../errors/ForbiddenError');
 
 function getUserArticles(req, res, next) {
   Article.find({ owner: req.user._id })
@@ -34,20 +35,15 @@ function createArticle(req, res, next) {
 }
 
 function deleteArticle(req, res, next) {
-  Article.findById(req.params.articleId)
-    .then((data) => {
-      if (data === null) {
-        throw new NotFoundError('Статья не найдена');
-      } else if ({ $eq: [req.user._id, data.owner] }) {
-        Article.findByIdAndRemove(req.params.articleId)
-          .then(() => {
-            res.send({ message: 'Статья удалена' });
-          })
-          .catch(next);
-      } else {
-        throw new NotFoundError('Статья не найдена');
+  Article.findById(req.params.articleId).select('+owner')
+    .orFail(() => new NotFoundError('Статья не найдена'))
+    .then((article) => {
+      if (String(article.owner) !== req.user._id) {
+        throw new ForbiddenError('Недостаточно прав');
       }
+      return Article.findByIdAndRemove(req.params.articleId);
     })
+    .then(() => res.send({ message: 'Статья удалена' }))
     .catch(next);
 }
 

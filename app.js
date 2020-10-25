@@ -68,6 +68,7 @@ app.use((err, req, res, next) => {
         : message,
       error: err,
     });
+  next();
 });
 
 app.listen(PORT);

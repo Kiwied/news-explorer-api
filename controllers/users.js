@@ -9,25 +9,15 @@ const NotFoundError = require('../errors/NotFoundError');
 const { JWT_SECRET = 'dev-key' } = process.env;
 
 function getAuthorizedUser(req, res, next) {
-  const { authorization } = req.headers;
-  const token = authorization.replace('Bearer ', '');
-
-  let payload;
-
-  try {
-    payload = jwt.verify(token, JWT_SECRET);
-    User.findById(payload._id)
-      .then((user) => {
-        if (user === null) {
-          throw new NotFoundError('Пользователь не найден');
-        } else {
-          res.send({ user });
-        }
-      })
-      .catch(next);
-  } catch (err) {
-    return res.status(401).send({ message: 'Необходима авторизация' });
-  }
+  return User.findById(req.user._id)
+    .then((user) => {
+      if (user === null) {
+        throw new NotFoundError('Пользователь не найден');
+      } else {
+        res.send({ user });
+      }
+    })
+    .catch(next);
 }
 
 function signup(req, res, next) {
