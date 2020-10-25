@@ -6,9 +6,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const { celebrate, Joi, errors } = require('celebrate');
 
-const users = require('./routes/users');
-const articles = require('./routes/articles');
-const notFound = require('./routes/notFound');
+const router = require('./routes/index');
 const auth = require('./middlewares/auth');
 const { signin, signup } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -53,9 +51,7 @@ app.post('/signin', celebrate({
 
 app.use(auth);
 
-app.use('/users', users);
-app.use('/articles', articles);
-app.use('*', notFound);
+app.use('/', router);
 
 app.use(errorLogger);
 
